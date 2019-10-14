@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.Scanner;
-
 public class Rejseplan {
 
 
@@ -16,7 +15,7 @@ public class Rejseplan {
             System.out.print("No records for you");
         while (res!= null & res.next()) {
             String departuretime = res.getString("Departuretime");
-            System.out.println("Fra København"+ departuretime);
+            System.out.println("Du skal tage fra København "+ departuretime);
             //String station = res.getString("StationName");
             //System.out.print(station);
         }
@@ -39,7 +38,7 @@ public class Rejseplan {
         return departures;
     }*/
 
-    public PreparedStatement selectAvailableDepartures(String StartStationName, String EndStationName, float endTime, Connection conn)
+    public PreparedStatement selectAvailableDepartures(String StartStationName, Connection conn)
         throws SQLException {
             String query = "select Departuretime from Departures where StationName = '" + StartStationName + "'";
             PreparedStatement departureFromStart = null;
@@ -55,15 +54,21 @@ public class Rejseplan {
         Rejseplan RP = new Rejseplan();
         Connection conn = null;
         try{
+            float endTime;
             String url = "jdbc:sqlite:C:\\Users\\rasse\\Desktop\\5 Semester\\sqlite/rejseplanenCasperRasmus.db";
             conn =  RP.connect(url);
-            System.out.println("Type any key to retrieve all stations");
+            System.out.println("Type your the name of the station you are departing from");
             Scanner scanner = new Scanner(System.in);
-            //String anyKey = scanner.nextLine();
             String StationName = scanner.nextLine();
+            System.out.println("Type the name of you end destination");
+            String DestinationStation = scanner.nextLine();
+            System.out.println("Type the time you wish to arrive at");
+            endTime = scanner.nextFloat();
+
+
             //PreparedStatement retrieveStations = RP.selectAvailableStations(conn);
             //retrieveStations.setString(1, anyKey);
-            PreparedStatement retrieveDepartures = RP.selectAvailableDepartures(StationName,conn);
+            PreparedStatement retrieveDepartures = RP.selectAvailableDepartures(StationName, conn);
             ResultSet departures = retrieveDepartures.executeQuery();
             //ResultSet stations = retrieveStations.executeQuery();
             //RP.PresentInformation(stations);
